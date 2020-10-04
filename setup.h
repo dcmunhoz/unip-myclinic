@@ -11,7 +11,7 @@ void setup() {
     int check = mkdir("dados");
 
     if (!check) {
-        printf("** NECESSARIO CRIAR ESTRUTURA DE ARQUIVOS ** \n\n");
+        printf("* NECESSARIO CRIAR ESTRUTURA DE ARQUIVOS * \n\n");
 
         // Validar se arquivos de usuários existe
         FILE *usuarios;
@@ -24,6 +24,7 @@ void setup() {
             fclose(arquivo);
             printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
         }
+        fclose(usuarios);
 
         // Validar se arquivos de agendas existe
         FILE *agendas;
@@ -35,11 +36,26 @@ void setup() {
             fclose(arquivo);
             printf("ARQUIVO DE AGENDAS CRIADO COM SUCESSO !\n");
         }
+        fclose(agendas);
 
-        fclose(usuarios);
+        // Validar se arquivos de cadastro existe
+        FILE *cadastro;
+        cadastro = fopen("dados/cadastro.txt", "r");
+        if (cadastro == NULL) {
+            printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
+            FILE *arquivo;
+            arquivo = fopen("dados/cadastro.txt", "w+");
+            fclose(arquivo);
+            printf("ARQUIVO DE CADASTRO CRIADO COM SUCESSO !\n");
+        }
+        fclose(cadastro);
+
+
+
+
         printf("ESTRUTURA CRIADA, EXECUTE O PROGRAMA NOVAMENTE \n\n");
         system("pause");
-        exit(1);
+        exit(0);
     }
 
 }

@@ -1,5 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h> //Biblioteca para usar a funçao strcmp
+#include<windows.h>
+#include<conio.h>
 #include "screens.h"
 #include "setup.h"
 
@@ -20,6 +23,7 @@ void main() {
     if (menuChoise == 1) {
         system("cls");
         showLogin();
+        
 
     } else if (menuChoise == 0) {
         return;
@@ -27,7 +31,9 @@ void main() {
 
     printf("\n\nFIM");
     system("pause");
+    
     return;
 }
+
 
 

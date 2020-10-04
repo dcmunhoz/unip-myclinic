@@ -1,6 +1,9 @@
-.idea
+.idea/
+.vscode/
 /bin/
 /cmake-build-debug/
+/dados/
 
 historico.txt
 CMakeLists.txt
+*.exe
