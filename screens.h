@@ -11,101 +11,146 @@
 #include<windows.h>
 #include<conio.h>
 
-
 int menuChoise;
+
+void drawHeader(char *headerName){
+    showWellcome();
+    printf("\t\t** %s **\n", headerName);
+    printf("-----------------------------------------------------------\n\n");
+}
 
 void showWellcome(){
     // Tela de boas vindas
-    printf("***************************************\n");
-    printf("      Bem Vindo ao MyClinic !!!\n");
-    printf("***************************************\n\n");
+    printf("|=========================================================|\n");
+    printf("\t\tBEM VINDO AO MYCLINIC !!!\n");
+    printf("|=========================================================|\n\n");
 }
 
 void showMenu(){
     // Exibir o menu
-    printf("ESCOLHA UMA DAS OPCOES INICIAIS: \n");
+    printf("ESCOLHA UMA DAS OPCOES: \n\n");
     printf("1 - LOGAR-SE\n");
     printf("0 - SAIR\n");
 }
 
 void showLogin(){
+
+    drawHeader("ACESSAR SISTEMA");
+
     char username[255];
     char password[255], c, screen[255];
 
-    showWellcome();
     printf("INFORME SEU USUARIO: ");
     scanf(" %s", username);
 
     printf("INFORME SUA SENHA: ");
-    int i = 0;
-    while ( (c = getch()) != 13 ) // 13 = ENTER na tabela cII
-    {   
-        
-        password[i] = c;
+    scanf(" %s", username);
 
-        printf("*");
-        Beep(1500,50);
-        i++;
-    }
-    password[i] = '\0';
-    i = 0;
+    /* Exibe a senha como asteristico */
+    // int i = 0;
+    // while ( (c = getch()) != 13 ) // 13 = ENTER na tabela cII
+    // {   
+        
+    //     password[i] = c;
+
+    //     printf("*");
+    //     Beep(1500,50);
+    //     i++;
+    // }
+    // password[i] = '\0';
+    // i = 0;
     
     // Validar usuário e senha
     showHome();
+
+
 }
+
 void showHome(){
+    int opcao = 0;
 
-    int num = 0;
+    do {
+        system("cls");
+        drawHeader("MENU PRINCIPAL");
+        printf("1 - NOVO AGENDAMENTO \n");
+        printf("2 - VISUALIZAR AGENDAMENTOS \n");
+        printf("3 - CANCELAR AGENDAMENTO \n");
+        printf("4 - CADASTROS \n");
+        printf("5 - RELATORIOS \n");
+        printf("6 - RECLAMACOES / ELOGIO DO PACIENTE \n");
+        printf("0 - SAIR DO MENU...\n");
+        printf("\nESCOLHA: ");
+        scanf("%d", &opcao);
 
+        if (opcao == 1) {
+            showNewSchedule();
+        } else if (opcao == 2) {
+            showSchedule();
+        } else if (opcao == 3) {
+            showCancelSchedule();
+        } else if (opcao == 4) {
+            showRegisters();
+        } else if (opcao == 5) {
+            
+        } else if (opcao == 6) {
+            showFeedback();
+        } else if (opcao == 0){
+            leave();
+        }
+
+    } while(opcao < 0 || opcao > 6);
+}
+
+void showNewSchedule(){
     system("cls");
+    drawHeader("NOVO AGENDAMENTO");
+}
 
-    printf("\t\t\tCADASTRO DE PACIENTES - CLINICA\n\n\n\n");
-		printf("|=========================================================|\n");
-		printf(	"		1 - CADASTRO DE PACIENTE: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf(	"		2 - VISUALIZAR DADOS DO PACIENTE: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf(	"		3 - MODIFICAR DADOS DO PACIENTE: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf(	"		4 - EXCLUIR DADOS DO PACIENTE: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf(	"		5 - UNIDADE MEDICA: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf(	"		6 - RECLAMACOES / ELOGIO DO PACIENTE: \n");
-		printf("|---------------------------------------------------------|\n");
-		printf("		0 - SAIR DO MENU...\n");
-		printf("|=========================================================|\n");
-        scanf("%d", &num);
-
-    if(num == 1){
-        showPatientRecord();
-        
-    }   else if( num == 2){
-        showViewPacientData();
-    }   else if( num == 3){
-        showModifyPatientData();
-    }   else if( num == 4){
-        showDeletepatientData();
-    }   else if( num == 5){
-        showMedicalunit();
-    }   else if( num == 6){
-        showfeedback();
-    }   else if( num == 0){
-        showGetout();
-    }
-
+void showSchedule(){
+    system("cls");
+    drawHeader("LISTA DE AGENDAMENTOS");
 
 }
 
-void showPatientRecord(){
+void showCancelSchedule(){
     system("cls");
+    drawHeader("CANCELAR AGENDAMENTO");
+}
 
-    printf("1 - CADASTRO DE PACIENTE: \n");
+void showRegisters() {
+    int opcao = 0;
+
+    do { 
+        system("cls");
+        drawHeader("MANU DE CADASTROS");
+        
+        printf("1 - CADASTRO DE PACIENTE\n");
+        printf("2 - CADASTRO DE MEDICOS\n");
+        printf("1 - CADASTRO DE FUNCIONARIOS\n");
+        printf("0 - VOLTAR\n\n");
+        printf("ESCOLHA: ");
+        scanf("%d", &opcao);
+
+        if (opcao == 1) {
+            showAddPatientRecord();
+        } else if (opcao == 2) {
+            showAddNewDoctor();
+        } else if (opcao == 3) {
+            showAddNewUser();
+        } else if (opcao == 0) {
+            showHome();
+        }
+
+    } while(opcao < 0);
+}
+
+void showAddPatientRecord(){
+    system("cls");
+    drawHeader("CADASTRO DE PACIENTE");
     printf("infome \n");
     printf("infome \n");
     printf("infome \n");
     printf("infome \n");
-      
 }
 
 void showViewPacientData(){
@@ -140,6 +185,25 @@ void showDeletepatientData(){
     printf("infome \n");
    
 }
+
+void showAddNewDoctor(){
+    system("cls");
+    drawHeader("CADASTRO DE MEDICO");
+    printf("infome \n");
+    printf("infome \n");
+    printf("infome \n");
+    printf("infome \n");
+}
+
+void showAddNewUser(){
+    system("cls");
+    drawHeader("CADASTRO DE FUNCIONARIO");
+    printf("infome \n");
+    printf("infome \n");
+    printf("infome \n");
+    printf("infome \n");
+}
+
 void showMedicalunit(){
     system("cls");
 
@@ -150,18 +214,21 @@ void showMedicalunit(){
        
 }
 
-void showfeedback(){
+void showFeedback(){
     system("cls");
+    drawHeader("RECLAMACOES E ELOGIOS");
 
-    printf("6 - RECLAMACOES / ELOGIO DO PACIENTE: \n");
     printf("Difgite sua sugestao: \n");
    
 }
 
-void showGetout(){
+void leave(){
     system("cls");
-
-    printf("0 - SAIR DO MENU... \n");
-   
+    printf("OBRIGADO POR USAR O MYCLINIC, ATE A PROXIMA !!!\n\n");
 }
+
+
+
+
+
 #endif //UNIP_PIM_CLINIC_SCREENS_H

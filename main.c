@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h> //Biblioteca para usar a funçao strcmp
-#include<windows.h>
-#include<conio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> //Biblioteca para usar a funçao strcmp
+#include <windows.h>
+#include <conio.h>
 #include "screens.h"
 #include "setup.h"
 
@@ -15,7 +15,7 @@ void main() {
         showWellcome();
         showMenu();
 
-        printf("ESCOLHA: ");
+        printf("\nESCOLHA: ");
         scanf("%d", &menuChoise);
 
     } while (menuChoise != 1 && menuChoise != 0);
@@ -26,10 +26,9 @@ void main() {
         
 
     } else if (menuChoise == 0) {
-        return;
+        leave();
     }
 
-    printf("\n\nFIM");
     system("pause");
     
     return;
