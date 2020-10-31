@@ -12,6 +12,7 @@
 #include<conio.h>
 
 int menuChoise;
+int nome; 
 
 void drawHeader(char *headerName){
     showWellcome();
@@ -33,34 +34,53 @@ void showMenu(){
     printf("0 - SAIR\n");
 }
 
+
 void showLogin(){
 
     drawHeader("ACESSAR SISTEMA");
 
-    char username[255];
-    char password[255], c, screen[255];
+    // char *ptrPassword;
+
+    // ptrUsername = malloc(255);
+
+    char username[16], password[16];
+    char c;
 
     printf("INFORME SEU USUARIO: ");
-    scanf(" %s", username);
+    scanf("%s", username);
 
     printf("INFORME SUA SENHA: ");
-    scanf(" %s", username);
+    // scanf("%s", password);
 
     /* Exibe a senha como asteristico */
-    // int i = 0;
-    // while ( (c = getch()) != 13 ) // 13 = ENTER na tabela cII
-    // {   
+    int i = 0;
+    int passwordLenght = 0;
+    while ( (c = getch()) != 13 ) // 13 = ENTER na tabela ASCII
+    {   
+        Beep(1500,50);
         
-    //     password[i] = c;
+        if (c != 8) {
+            password[i] = c;
+            printf("*");
+            i++;
+            passwordLenght++;
+        } else {
+            if (passwordLenght > 0) {
+                i--;
+                passwordLenght--;
+                password[i] = '\0';
+                putchar('\b');
+                putchar(' ');
+                putchar('\b');
+            }
+            
+        }
+    }
+    password[i] = '\0';
+    i = 0;
+    passwordLenght = 0;
 
-    //     printf("*");
-    //     Beep(1500,50);
-    //     i++;
-    // }
-    // password[i] = '\0';
-    // i = 0;
-    
-    // Validar usuário e senha
+    //Validar usuário e senha
     showHome();
 
 
@@ -101,9 +121,34 @@ void showHome(){
     } while(opcao < 0 || opcao > 6);
 }
 
-void showNewSchedule(){
+void showNewSchedule()
+{   char nome[50]; 
+    int i = 0;
+    int opcao = 0;
+    char nomeMedico[50];
+    int data[10];
+    float horario[10];
     system("cls");
-    drawHeader("NOVO AGENDAMENTO");
+    
+    
+        for(i = 0; i < 1; i++){
+            drawHeader("NOVO AGENDAMENTO");
+            printf("infome o nome do paciente: \n",nome);
+            scanf("%s", &nome[i]);
+            printf("Informe o nome do medico: ", nomeMedico);
+            scanf("%s", &nomeMedico[i]);
+            printf("Informe a data da consulta: ", data);
+            scanf("%d", &data[i]);
+            printf("Informe o horario da consulta: ", horario);
+            scanf("%d", &horario[i]);
+            printf("Voltar para o menu");
+
+        }
+         if (opcao == 0) {
+            showHome();
+        }
+
+    
 }
 
 void showSchedule(){
@@ -126,7 +171,7 @@ void showRegisters() {
         
         printf("1 - CADASTRO DE PACIENTE\n");
         printf("2 - CADASTRO DE MEDICOS\n");
-        printf("1 - CADASTRO DE FUNCIONARIOS\n");
+        printf("3 - CADASTRO DE FUNCIONARIOS\n");
         printf("0 - VOLTAR\n\n");
         printf("ESCOLHA: ");
         scanf("%d", &opcao);
@@ -146,32 +191,51 @@ void showRegisters() {
 
 void showAddPatientRecord(){
     system("cls");
-    drawHeader("CADASTRO DE PACIENTE");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    char nome[50]; 
+    int CPF[50]; 
+    int telefone[50]; 
+    char email[100];
+    int i = 0;
+    int opcao = 0;
+        for(i = 0; i < 1; i++){
+            drawHeader("CADASTRO DE PACIENTE");
+            printf("infome o nome do paciente: \n",nome);
+            scanf("%s", &nome[i]);
+            printf("infome o CPF: \n", CPF);
+            scanf("%d", &CPF[i]);
+            printf("infome o telefone: \n", telefone);
+            scanf("%d", &telefone[i]);
+            printf("infome E-mail: \n", email);
+            scanf("%s", &email[i]);
+            printf("Voltar para o menu");
+
+        }
+         if (opcao == 0) {
+            showHome();
+        }
+
+       
 }
 
 void showViewPacientData(){
     system("cls");
 
     printf("2 - VISUALIZAR DADOS DO PACIENTE: \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    printf("infome o nome que deseja consultar: \n", nome);
+    scanf("%s", &nome);
+
    
 }
 
 void showModifyPatientData(){
     system("cls");
+    char nome[50];
+    int i=0;
 
     printf("3 - MODIFICAR DADOS DO PACIENTE: \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    printf("infome o nome: \n", nome);
+    scanf("%s", &nome[i]);
+
    
 }
 
@@ -188,37 +252,94 @@ void showDeletepatientData(){
 
 void showAddNewDoctor(){
     system("cls");
-    drawHeader("CADASTRO DE MEDICO");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    int CPF[50], crc[10], telefone[10];
+    char email[50], nomeMedico[50];
+    int i = 0, opcao = 0;
+
+        for(i = 0; i < 1; i++){
+            drawHeader("CADASTRO DE MEDICO");
+            printf("infome o nome do medico: \n", nomeMedico);
+            scanf("%s", &nomeMedico[i]);
+            printf("infome informe crc \n", crc);
+            scanf("%d", &crc[i]);
+            printf("infome o cpf:\n", CPF);
+            scanf("%d", &CPF[i]);
+            printf("infome o telefone: \n", telefone);
+            scanf("%d", &telefone[i]);
+            printf("Informe o E-mail: \n", email);
+            scanf("%s", &email[i]);
+    }
+    if (opcao == 0) {
+            showHome();
+        }
 }
 
 void showAddNewUser(){
-    system("cls");
-    drawHeader("CADASTRO DE FUNCIONARIO");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    system("cls");   
+    char nome[50], cargo[10]; 
+    int CPF[50], codigo[10]; 
+    int telefone[50]; 
+    char email[100];
+    int i = 0;
+    int opcao = 0;
+        for(i = 0; i < 1; i++){
+            drawHeader("CADASTRO DE FUNCIONARIO");
+            printf("Infome o nome do funcionario: \n",nome);
+            scanf("%s", &nome[i]);
+            printf("Infome o CPF: \n", CPF);
+            scanf("%d", &CPF[i]);
+            printf("Infome o telefone: \n", telefone);
+            scanf("%d", &telefone[i]);
+            printf("Infome E-mail: \n", email);
+            scanf("%s", &email[i]);
+            printf("Informe o Cargo: \n", cargo);
+            scanf("%s", &cargo[i]);
+            printf("Informe o Codigo que sera cadastrado: \n", codigo);
+            scanf("%d", &codigo[i]);
+            
+
+        }
+        printf("Voltar para o menu");
+         if (opcao == 0) {
+            showHome();
+        }
 }
 
 void showMedicalunit(){
     system("cls");
-
+    int opcao = 0;
     printf("5 - UNIDADE MEDICA: \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
+    for (int i = 0; i < 1; i++)
+    {
+        printf("Clinica 1 - rua: Lafaiete 779 \n");
+        printf("Clinica 2 - rua: Tibirica 1053 \n");
+        printf("Clinica 3 - rua: 9 de julho 668 \n");   
+    }
+    if(opcao == 1){
+        opcao = 1;
+    } else if (opcao == 2){
+        opcao = 2;
+    } else if(opcao);
+    
        
 }
 
 void showFeedback(){
     system("cls");
+    char sugestao [500];
+    int i =0, opcao = 0;
+    int fedback;
     drawHeader("RECLAMACOES E ELOGIOS");
 
-    printf("Difgite sua sugestao: \n");
+    printf("Difgite sua sugestao: \n", sugestao);
+    scanf("%s", &sugestao[i]);
+    printf(" Deseja enviar seu fedback? 1 - sim \t 0 - nao ", fedback);
+    scanf("%d", &fedback);
+        if (opcao == 0) {
+            showHome();
+        }else if(opcao == 1){
+            opcao = 1;
+        }
    
 }
 

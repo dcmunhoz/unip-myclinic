@@ -8,7 +8,7 @@
 
 void main() {
     setup();
-//    system("cls");
+    system("cls");
 
     do{
         system("cls");
@@ -32,6 +32,8 @@ void main() {
     system("pause");
     
     return;
+
+
 }
 
 
