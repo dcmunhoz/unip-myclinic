@@ -20,7 +20,7 @@ void setup() {
             printf("ARQUIVO DE USUARIOS SENDO CRIADO..... \n");
             FILE *arquivo;
             arquivo = fopen("dados/usuarios.txt", "w+");
-            fputs("admin;admin", arquivo);
+            fprintf(arquivo, "%d %s %s\n", 1, "admin", "admin");
             fclose(arquivo);
             printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
         }
@@ -50,6 +50,16 @@ void setup() {
         }
         fclose(cadastro);
 
+        FILE *cadastropaciente;
+        cadastropaciente = fopen("dados/cadastro paciente.txt", "r");
+        if (cadastropaciente == NULL) {
+            printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
+            FILE *arquivo;
+            arquivo = fopen("dados/cadastro paciente.txt", "w+");
+            fclose(arquivo);
+            printf("ARQUIVO DE CADASTRO CRIADO COM SUCESSO !\n");
+        }
+        fclose(cadastropaciente);
 
 
 

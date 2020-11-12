@@ -6,35 +6,18 @@
 #include "screens.h"
 #include "setup.h"
 
+#include "source/usuarios.h"
+
+
 void main() {
     setup();
     system("cls");
-
-    do{
-        system("cls");
-        showWellcome();
-        showMenu();
-
-        printf("\nESCOLHA: ");
-        scanf("%d", &menuChoise);
-
-    } while (menuChoise != 1 && menuChoise != 0);
-
-    if (menuChoise == 1) {
-        system("cls");
-        showLogin();
-        
-
-    } else if (menuChoise == 0) {
-        leave();
-    }
-
+    showPrincipal();
     system("pause");
     
     return;
-
-
 }
+
 
 
 
