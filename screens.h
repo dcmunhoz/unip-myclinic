@@ -16,6 +16,8 @@
 #include "source/medico.h"
 #include "source/paciente.h"
 
+int defaultUserClinic = 0;
+
 void showPrincipal()
 {
     int menuChoise = 999;
@@ -73,7 +75,7 @@ void showLogin()
     char username[16], password[16];
     char validUsername[16], validPassword[16];
     char c;
-    int userId;
+    int userId, userClinic;
     int userValidated = 0;
 
     printf("INFORME SEU USUARIO: ");
@@ -124,7 +126,7 @@ void showLogin()
 
     while (!feof(fUsers))
     {
-        fscanf(fUsers, "%d %s %s", &userId, validUsername, validPassword);
+        fscanf(fUsers, "%d %s %s %d", &userId, validUsername, validPassword, userClinic);
         if (strcmp(username, validUsername) == 0 && strcmp(password, validPassword) == 0)
         {
             userValidated = 1;
@@ -133,6 +135,7 @@ void showLogin()
 
     if (userValidated == 1)
     {
+        defaultUserClinic = userClinic;
         showHome();
     }
     else
@@ -476,6 +479,29 @@ void showAddNewUser()
 {
     system("cls");
     drawHeader("CADASTRO DE FUNCIONARIO");
+
+    Usuario usuario;
+    usuario.id = 0;
+    usuario.clinicaAtendimento = 0;
+
+    printf("Digite o novo usuario >: ");
+    fflush(stdin);
+    gets(usuario.username);
+
+    printf("Digite qual a senha >: ");
+    fflush(stdin);
+    gets(usuario.password);
+
+    printf("Qual a clinica pertencente? >: ");
+    scanf("%d", &usuario.clinicaAtendimento);
+
+    if (gravarUsuario(usuario) == 0) {
+        printf("\n\nHOUVE UM ERRO AO TENTAR GRAVAR O USUARIO !! \n\n");
+        exit(1);
+    }else {
+        printf("\nDADOS DO USUARIO SALVOS COM SUCESSO !! \n \n");
+        system("pause");
+    }
     
     showHome();
 }

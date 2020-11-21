@@ -21,7 +21,7 @@ void setup() {
             printf("ARQUIVO DE USUARIOS SENDO CRIADO..... \n");
             FILE *arquivo;
             arquivo = fopen("dados/usuarios.txt", "w+");
-            fprintf(arquivo, "%d %s %s\n", 1, "admin", "admin");
+            fprintf(arquivo, "%d %s %s %d\n", 1, "admin", "admin", 1);
             fclose(arquivo);
             printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
         }
