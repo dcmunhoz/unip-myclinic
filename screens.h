@@ -14,6 +14,7 @@
 #include "source/usuarios.h"
 #include "source/agenda.h"
 #include "source/medico.h"
+#include "source/paciente.h"
 
 void showPrincipal()
 {
@@ -378,45 +379,34 @@ void showRegisters()
 
 void showAddPatientRecord()
 {
-    char nome[253];
-    char cpf[255];
-    char telefone[255];
-    char email[255];
-    char line[255];
-    system("cls");
-
     drawHeader("CADASTRO DE PACIENTE");
-    printf("infome o nome do paciente: ");
-    scanf("%s", nome);
-    strcat(line, nome);
-    strcat(line, "; ");
 
-    printf("infome o CPF: ");
-    scanf("%s", cpf);
-    strcat(line, cpf);
-    strcat(line, "; ");
+    Paciente paciente;
+    paciente.id = 0;
 
-    printf("infome o telefone: ");
-    scanf("%s", telefone);
-    strcat(line, telefone);
-    strcat(line, "; ");
+    printf("Informe o nome do paciente >: ");
+    fflush(stdin);
+    gets(paciente.nome);    
 
-    printf("infome E-mail: ");
-    scanf("%s", email);
-    strcat(line, email);
-    strcat(line, "; \n");
+    printf("Informe o CPF do paciente (SOMENTE NUMEROS) >: ");
+    fflush(stdin);
+    gets(paciente.cpf);
 
-    FILE *fPaciente = fopen("dados/cadastro paciente.txt", "a+");
+    printf("Informe o e-mail do paciente >: ");
+    fflush(stdin);
+    gets(paciente.email);
 
-    if (fPaciente == NULL)
-    {
-        system("CLS");
-        printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
+    printf("Informe o telefone do paciente (SOMENTE NUMEROS) >: ");
+    fflush(stdin);
+    gets(paciente.telefone);
+
+    if (gravarPaciente(paciente) == 0) {
+        printf("\n\n HOUVE UM ERRO AO TENTAR GRAVAR OS DADOS DO PACIENTE !!! \n\n");
         exit(1);
+    } else { 
+        printf("DADOS DO PACIENTE FORAM SALVOS !! \n \n");
+        system("pause");
     }
-
-    fputs(line, fPaciente);
-    fclose(fPaciente);
 
     showHome();
 }
