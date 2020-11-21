@@ -5,21 +5,21 @@
 #ifndef UNIP_PIM_CLINIC_SCREENS_H
 #define UNIP_PIM_CLINIC_SCREENS_H
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h> //Biblioteca para usar a funçao strcmp
-#include<windows.h>
-#include<conio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h> //Biblioteca para usar a funçao strcmp
+#include <windows.h>
+#include <conio.h>
 
 #include "source/usuarios.h"
 #include "source/agenda.h"
+#include "source/medico.h"
 
-int menuChoise;
-int nome; 
-
-void showPrincipal(){
-    menuChoise = 999;
-    do{
+void showPrincipal()
+{
+    int menuChoise = 999;
+    do
+    {
         system("cls");
         showWellcome();
         showMenu();
@@ -29,21 +29,26 @@ void showPrincipal(){
 
     } while (menuChoise != 1 && menuChoise != 0);
 
-    if (menuChoise == 1) {
-        showLogin();
-    } else if (menuChoise == 0) {
+    if (menuChoise == 1)
+    {
+        //showLogin();
+        showHome();
+    }
+    else if (menuChoise == 0)
+    {
         leave();
     }
-
 }
 
-void drawHeader(char *headerName){
-    showWellcome(); 
+void drawHeader(char *headerName)
+{
+    showWellcome();
     printf("\t\t** %s **\n", headerName);
     printf("-----------------------------------------------------------\n\n");
 }
 
-void showWellcome(){
+void showWellcome()
+{
     system("cls");
     // Tela de boas vindas
     printf("|=========================================================|\n");
@@ -51,42 +56,48 @@ void showWellcome(){
     printf("|=========================================================|\n\n");
 }
 
-void showMenu(){
+void showMenu()
+{
     // Exibir o menu
     printf("ESCOLHA UMA DAS OPCOES: \n\n");
     printf("1 - LOGAR-SE\n");
     printf("0 - SAIR\n");
 }
 
-
-void showLogin(){
+void showLogin()
+{
 
     drawHeader("ACESSAR SISTEMA");
-   
+
     char username[16], password[16];
     char validUsername[16], validPassword[16];
     char c;
     int userId;
+    int userValidated = 0;
 
     printf("INFORME SEU USUARIO: ");
     scanf("%s", username);
 
     printf("INFORME SUA SENHA: ");
-    
+
     /* Exibe a senha como asteristico */
     int i = 0;
     int passwordLenght = 0;
-    while ( (c = getch()) != 13 ) // 13 = ENTER na tabela ASCII
-    {   
-        Beep(1500,50);
-        
-        if (c != 8) {
+    while ((c = getch()) != 13) // 13 = ENTER na tabela ASCII
+    {
+        Beep(1500, 50);
+
+        if (c != 8)
+        {
             password[i] = c;
             printf("*");
             i++;
             passwordLenght++;
-        } else {
-            if (passwordLenght > 0) {
+        }
+        else
+        {
+            if (passwordLenght > 0)
+            {
                 i--;
                 passwordLenght--;
                 password[i] = '\0';
@@ -94,7 +105,6 @@ void showLogin(){
                 putchar(' ');
                 putchar('\b');
             }
-            
         }
     }
     password[i] = '\0';
@@ -102,39 +112,49 @@ void showLogin(){
     passwordLenght = 0;
 
     //Validar usuário e senha
-    FILE * fUsers = fopen("dados/usuarios.txt", "r");
+    FILE *fUsers = fopen("dados/usuarios.txt", "r");
 
-    if (fUsers == NULL) {
+    if (fUsers == NULL)
+    {
         system("CLS");
         printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
         exit(1);
     }
 
-    while (!feof(fUsers)) { 
+    while (!feof(fUsers))
+    {
         fscanf(fUsers, "%d %s %s", &userId, validUsername, validPassword);
-        if (strcmp(username, validUsername) == 0 && strcmp(password, validPassword) == 0) {
-            showHome();
+        if (strcmp(username, validUsername) == 0 && strcmp(password, validPassword) == 0)
+        {
+            userValidated = 1;
         }
     }
-    fclose(fUsers);
-    
-    printf("\n\nUSUARIO E/OU SENHA INCORRETOS \n\n");
-    system("pause");
-    system("cls");
-    showPrincipal();
 
-
+    if (userValidated == 1)
+    {
+        showHome();
+    }
+    else
+    {
+        fclose(fUsers);
+        printf("\n\nUSUARIO E/OU SENHA INCORRETOS \n\n");
+        system("pause");
+        system("cls");
+        showPrincipal();
+    }
 }
 
-void showHome(){
+void showHome()
+{
     int opcao = 0;
 
-    do {
+    do
+    {
         system("cls");
         drawHeader("MENU PRINCIPAL");
         printf("1 - NOVO AGENDAMENTO \n");
         printf("2 - VISUALIZAR AGENDAMENTOS \n");
-        printf("3 - ALTERAR AGENDAMENTO \n");
+        printf("3 - EDITAR AGENDAMENTO \n");
         printf("4 - CADASTROS \n");
         printf("5 - RELATORIOS \n");
         printf("6 - RECLAMACOES / ELOGIO DO PACIENTE \n");
@@ -142,147 +162,193 @@ void showHome(){
         printf("\nESCOLHA: ");
         scanf("%d", &opcao);
 
-        if (opcao == 1) {
+        if (opcao == 1)
+        {
             showNewSchedule();
-        } else if (opcao == 2) {
+        }
+        else if (opcao == 2)
+        {
             showSchedule();
-        } else if (opcao == 3) {
-            showCancelSchedule();
-        } else if (opcao == 4) {
+        }
+        else if (opcao == 3)
+        {
+            showEditSchedule();
+        }
+        else if (opcao == 4)
+        {
             showRegisters();
-        } else if (opcao == 5) {
-            
-        } else if (opcao == 6) {
+        }
+        else if (opcao == 5)
+        {
+        }
+        else if (opcao == 6)
+        {
             showFeedback();
-        } else if (opcao == 0){
+        }
+        else if (opcao == 0)
+        {
             leave();
         }
 
-    } while(opcao < 0 || opcao > 6);
+    } while (opcao < 0 || opcao > 6);
 }
 
 void showNewSchedule()
-{   
+{
 
     Agenda agenda;
-    
-    char nome[253]; 
-    char nomeMedico[255]; 
-    char data[255];
-    char horario[255];
-    char line[255];
+    agenda.unidadeMedica = 0;
+    agenda.valorConsulta = 0.0;
+
     system("cls");
 
     drawHeader("NOVO AGENDAMENTO");
 
-    printf("Infome o nome do paciente: ");
-    // scanf("%s", agenda.nomePaciente);
+    printf("Infome o nome do paciente:");
     fflush(stdin);
     gets(agenda.nomePaciente);
-    
-    printf("Informe o nome do medico: ");
-    // scanf("%s", agenda.nomeMedico);
+
+    printf("Informe o nome do medico:");
+    fflush(stdin);
     gets(agenda.nomeMedico);
 
-    printf("Informe a data da consulta: ");
-    // scanf("%s", agenda.dataAtendimento);
+    printf("Informe a data da consulta:");
+    fflush(stdin);
     gets(agenda.dataAtendimento);
 
-    printf("Informe o horario da consulta: ");
-    // scanf("%s", agenda.horaAtendimento);
+    printf("Informe o horario da consulta:");
+    fflush(stdin);
     gets(agenda.horaAtendimento);
 
-    if( gravarAgenda(agenda) == 1 ){
+    printf("Infome a Clinica:");
+    fflush(stdin);
+    scanf("%d", &agenda.unidadeMedica);
+
+    printf("Infome o Valor da consulta:");
+    fflush(stdin);
+    scanf("%f", &agenda.valorConsulta);
+
+    if (gravarAgenda(agenda) == 1)
+    {
         showHome();
-    } else {
+    }
+    else
+    {
         system("CLS");
         printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE AGENDA.");
         exit(1);
     }
-
 }
 
-void showSchedule(){
-    char nome[253]; 
-    char nomeMedico[255]; 
-    char data[255];
-    char horario[255];
-    char line;
+void showSchedule()
+{
 
     system("cls");
     drawHeader("LISTA DE AGENDAMENTOS");
-
-    int idUltimaAgenda = ultimaAgenda();
-
-    printf("%d -> ", idUltimaAgenda);
-
+    listarAgenda();
     system("pause");
-
-    // FILE * agendas = fopen("dados/agendas.txt", "r");
-
-    // if (agendas != NULL) {
-    //     while (fscanf(agendas, "%s %s %s %s ",&nome, nomeMedico, data, horario)!= EOF )
-    //     {
-    //         printf(" %s %s %s %s\n", nome, nomeMedico, data, horario);
-    //     }
-        
-    // }
-    // system("pause");
-
-    // showHome();
-   
-    // fputs(line, agendas);
-    // fclose(agendas);
-
-   
+    showHome();
 }
 
-void showCancelSchedule(){
+void showEditSchedule()
+{
     int opcao = 0;
-    char nome[253]; 
-    char nomeMedico[255]; 
-    char data[255];
-    char horario[255];
-    char line;
+
     system("cls");
     drawHeader("ALTERAR AGENDAMENTO");
 
-    printf("1 - Alterar\n2 - Cancelar\n");
-    printf("Deseja alterar informacoes: ");
+    printf("1 - EDITAR\n2 - CANCELAR\n0 - VOLTAR\n");
+    printf("SELECIONE UMA OPCAO >: ");
     scanf("%d", &opcao);
-    if(opcao == 1){
-        FILE * agendas = fopen("dados/agendas.txt", "r");
-        
-        if (agendas != NULL) {
-        while (fscanf(agendas, "%s %s %s %s ",&nome, nomeMedico, data, horario)!= EOF )
-        {
-            printf(" %s %s %s %s\n", nome, nomeMedico, data, horario);
-        }
-        
-        }
-    }else if(opcao == 2){
-        FILE * agendas = fopen("dados/agendas.txt", "r");
+    if (opcao == 1)
+    {
 
-        if (agendas != NULL) {
-        while (fscanf(agendas, "%s %s %s %s ",&nome, nomeMedico, data, horario)!= EOF )
+        Agenda agenda;
+
+        system("cls");
+
+        drawHeader("EDITAR AGENDAMENTO");
+        listarAgenda();
+        printf("QUAL ID DESEJA ALTERAR? (0 - SAIR) >: ");
+        scanf("%d", &agenda.id);
+
+        if (agenda.id != 0)
         {
-            printf(" %s %s %s %s\n", nome, nomeMedico, data, horario);
-        }
-        
+            printf("Infome o nome do paciente: ");
+            fflush(stdin);
+            gets(agenda.nomePaciente);
+
+            printf("Informe o nome do medico: ");
+            fflush(stdin);
+            gets(agenda.nomeMedico);
+
+            printf("Informe a data da consulta: ");
+            fflush(stdin);
+            gets(agenda.dataAtendimento);
+
+            printf("Informe o horario da consulta: ");
+            fflush(stdin);
+            gets(agenda.horaAtendimento);
+
+            printf("Infome a Clinica:");
+            fflush(stdin);
+            scanf("%d", &agenda.unidadeMedica);
+
+            printf("Infome o Valor da consulta:");
+            fflush(stdin);
+            scanf("%f", &agenda.valorConsulta);
+
+            if (editarAgenda(agenda) == 0)
+            {
+
+                printf("\n \n ** ERRO AO ABRIR AGENDA PARA EDICAO ** \n \n");
+                exit(1);
+            }
+
+            printf("\n \n AGENDA EDITADA COM SUCESSO !! \n \n");
+            system("pause");
         }
     }
-    system("pause");
+    else if (opcao == 2)
+    {
+        system("cls");
+        drawHeader("CANCELAR AGENDAMENTO");
+
+        int idCancel;
+        listarAgenda();
+        printf("\n QUAL ID DA AGENDA A CANCELAR? (0 - SAIR) >: ");
+        scanf("%d", &idCancel);
+
+        if (idCancel != 0)
+        {
+            if (cancelarAgenda(idCancel) == 0)
+            {
+
+                printf("\n \n ** ERRO AO ABRIR AGENDA PARA CANCELAMENTO ** \n \n");
+                exit(1);
+            }
+
+            printf("\n \n AGENDA EDITADA COM SUCESSO !! \n \n");
+            system("pause");
+        }
+    }
+    else if (opcao == 0)
+    {
+        showHome();
+    }
 
     showHome();
 }
 
-void showRegisters() {
+void showRegisters()
+{
     int opcao = 0;
 
-    do { 
+    do
+    {
         system("cls");
         drawHeader("MANU DE CADASTROS");
-        
+
         printf("1 - CADASTRO DE PACIENTE\n");
         printf("2 - CADASTRO DE MEDICOS\n");
         printf("3 - CADASTRO DE FUNCIONARIOS\n");
@@ -290,23 +356,31 @@ void showRegisters() {
         printf("ESCOLHA: ");
         scanf("%d", &opcao);
 
-        if (opcao == 1) {
+        if (opcao == 1)
+        {
             showAddPatientRecord();
-        } else if (opcao == 2) {
+        }
+        else if (opcao == 2)
+        {
             showAddNewDoctor();
-        } else if (opcao == 3) {
+        }
+        else if (opcao == 3)
+        {
             showAddNewUser();
-        } else if (opcao == 0) {
+        }
+        else if (opcao == 0)
+        {
             showHome();
         }
 
-    } while(opcao < 0);
+    } while (opcao < 0);
 }
 
-void showAddPatientRecord(){
-    char nome[253]; 
-    char cpf[255]; 
-    char telefone[255]; 
+void showAddPatientRecord()
+{
+    char nome[253];
+    char cpf[255];
+    char telefone[255];
     char email[255];
     char line[255];
     system("cls");
@@ -332,117 +406,88 @@ void showAddPatientRecord(){
     strcat(line, email);
     strcat(line, "; \n");
 
-    FILE * fPaciente = fopen("dados/cadastro paciente.txt", "a+");
+    FILE *fPaciente = fopen("dados/cadastro paciente.txt", "a+");
 
-    if (fPaciente == NULL) {
+    if (fPaciente == NULL)
+    {
         system("CLS");
         printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
         exit(1);
     }
-    
+
     fputs(line, fPaciente);
     fclose(fPaciente);
 
     showHome();
-               
 }
 
-void showViewPacientData(){
+void showViewPacientData()
+{
     system("cls");
 
     printf("2 - VISUALIZAR DADOS DO PACIENTE: \n");
-    printf("infome o nome que deseja consultar: \n", nome);
-    scanf("%s", &nome);
-
-   
+    //printf("infome o nome que deseja consultar: \n", nome);
+    //scanf("%s", &nome);
 }
 
-void showModifyPatientData(){
+void showModifyPatientData()
+{
     system("cls");
     char nome[50];
-    int i=0;
+    int i = 0;
 
     printf("3 - MODIFICAR DADOS DO PACIENTE: \n");
     printf("infome o nome: \n", nome);
     scanf("%s", &nome[i]);
-
-   
 }
 
-void showDeletepatientData(){
+void showAddNewDoctor()
+{
     system("cls");
-
-    printf("4 - EXCLUIR DADOS DO PACIENTE: \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    printf("infome \n");
-    FILE * fCadas = fopen("dados/cadastro.txt", "r");
-
-    if (fCadas == NULL) {
-        system("CLS");
-        printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
-        exit(1);
-    }
-   
-}
-
-void showAddNewDoctor(){
-
-    char nomeMedico[255];
-    char crc[255];
-    char CPF[255];
-    char telefone[252];
-    char email[252];
-    char line[255];
-    system("cls");
-
-        
     drawHeader("CADASTRO DE MEDICO");
-    printf("Infome o nome do medico: ");
-    scanf("%s", nomeMedico);
-    strcat(line, nomeMedico);
-    strcat(line, "; ");
-    printf("Informe informe crc: ");
-    scanf("%s", crc);
-    strcat(line, crc);
-    strcat(line, "; ");
-    printf("Informe o cpf:");
-    scanf("%s", CPF);
-    strcat(line, CPF);
-    strcat(line, "; ");
-    printf("Informe o telefone: ");
-    scanf("%s", telefone);
-    strcat(line, telefone);
-    strcat(line, "; ");
-    printf("Informe o E-mail: ");
-    scanf("%s", email);
-    strcat(line, email);
-    strcat(line, "; \n");
-    
-    FILE * fCadas = fopen("dados/cadastro.txt", "a+");
 
-    if (fCadas == NULL) {
-        system("CLS");
-        printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
-        exit(1);
-    }
+    Medico medico;
+    medico.crm = 0;
+    medico.clinica = 0;
+
+    printf("Informe o CRM do medico >: ");
+    fflush(stdin);
+    scanf("%d", &medico.crm);    
     
-    fputs(line, fCadas);
-    fclose(fCadas);
+    printf("Informe o nome do medico >: ");
+    fflush(stdin);
+    gets(medico.nome);
+    
+    printf("Informe o CPF do medico >: ");
+    fflush(stdin);
+    gets(medico.cpf);
+
+    printf("Informe o e-mail do medico >: ");
+    fflush(stdin);
+    gets(medico.email);
+    
+    printf("Informe a clinica de atendimento >: ");
+    fflush(stdin);
+    scanf("%d", medico.clinica);
+
+    if (gravarMedico(medico) != 0) {
+        printf("\n\n MEDICO CADASTRADO COM SUCESSO !! \n \n");
+        system("pause");
+    } else {
+        printf("HOUVE UM ERRO AO TENTAR GRAVAR O MEDICO !!!");
+        exit(1);
+    }    
+
 
     showHome();
-        
 }
 
-void showAddNewUser(){
-    system("cls");   
-    char nome[253], cargo[255]; 
-    char CPF[255], codigo[255]; 
-    char telefone[255]; 
-    char email[255];
-    char line[255];
-        
+void showAddNewUser()
+{
+    system("cls");
+
+
+
     drawHeader("CADASTRO DE FUNCIONARIO");
     printf("Informe o nome do funcionario: ");
     scanf("%s", nome);
@@ -468,56 +513,84 @@ void showAddNewUser(){
     scanf("%s", codigo);
     strcat(line, codigo);
     strcat(line, "; \n");
-    FILE * fCadasfun = fopen("dados/cadastro.txt", "a+");
+    FILE *fCadasfun = fopen("dados/cadastro.txt", "a+");
 
-    if (fCadasfun == NULL) {
+    if (fCadasfun == NULL)
+    {
         system("CLS");
         printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
         exit(1);
     }
-    
+
     fputs(line, fCadasfun);
     fclose(fCadasfun);
 
-        
     showHome();
-       
 }
 
-void showMedicalunit(){    
-    int opcao = 0;
+void showMedicalunit()
+{
+    FILE *agendas;
+    agendas = fopen("dados/agendas.txt", "r");
+    float valorConsulta;
 
     system("cls");
     printf("5 - RELATORIOS: \n");
+
+    while (fscanf(agendas, "%f", &valorConsulta) != EOF)
+    {
+        printf("%f", valorConsulta);
+    }
     
+    
+
+    //if (agendas != 0)
+    //{
+    //    
+    //    
+    //    for (int i=5;i<=5;i++)
+    //    {
+    //        printf("5 - RELATORIOS: \n");
+    //        fseek(agendas, i, SEEK_SET); // vai pra coluna 'i' do arquivo
+    //        valorConsulta = fgetc(agendas); // pega o caractere
+    //        printf("%d %.2f", valorConsulta); // imprime na tela
+    //    }
+    //}
 }
 
-void showFeedback(){
-    system("cls");
-    char sugestao [500];
-    int i =0, opcao = 0;
-    int fedback;
+void showFeedback()
+{
+    char sugestao[500];
+    int i = 0, opcao = 0;
+    int feedback;
+    char line[255];
+
     drawHeader("RECLAMACOES E ELOGIOS");
 
-    printf("Difgite sua sugestao: \n", sugestao);
-    scanf("%s", &sugestao[i]);
-    printf(" Deseja enviar seu fedback? 1 - sim \t 0 - nao ", fedback);
-    scanf("%d", &fedback);
-        if (opcao == 0) {
-            showHome();
-        }else if(opcao == 1){
-            opcao = 1;
-        }
-   
+    printf("Difgite sua sugestao: \n");
+    fflush(stdin);
+    gets(sugestao);
+    printf(" Deseja enviar seu feedback? 1 - sim \t 0 - nao ");
+    scanf("%d", &feedback);
+    FILE *fFeedBack = fopen("dados/feedback.txt", "a+");
+
+    if (fFeedBack == NULL)
+    {
+        system("CLS");
+        printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE FEEDBACK.");
+        exit(1);
+    }
+
+    fprintf(fFeedBack, "%s\n", sugestao);
+    fclose(fFeedBack);
+
+    showHome();
 }
 
-void leave(){
+void leave()
+{
     system("cls");
     printf("OBRIGADO POR USAR O MYCLINIC, ATE A PROXIMA !!!\n\n");
 }
-
-
-
-
 
 #endif //UNIP_PIM_CLINIC_SCREENS_H

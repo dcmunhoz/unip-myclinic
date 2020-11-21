@@ -11,6 +11,7 @@ void setup() {
     int check = mkdir("dados");
 
     if (!check) {
+        mkdir("dados/tmp");
         printf("* NECESSARIO CRIAR ESTRUTURA DE ARQUIVOS * \n\n");
 
         // Validar se arquivos de usuários existe
@@ -25,6 +26,18 @@ void setup() {
             printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
         }
         fclose(usuarios);
+
+        // Validar se arquivos de medicos existe
+        FILE *medicos;
+        medicos = fopen("dados/medicos.txt", "r");
+        if (usuarios == NULL) {
+            printf("ARQUIVO DE USUARIOS SENDO CRIADO..... \n");
+            FILE *arquivo;
+            arquivo = fopen("dados/usuarios.txt", "w+");
+            fclose(arquivo);
+            printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
+        }
+        fclose(medicos);
 
         // Validar se arquivos de agendas existe
         FILE *agendas;
@@ -50,8 +63,9 @@ void setup() {
         }
         fclose(cadastro);
 
+        // Validar se o arquivo de usuários existe 
         FILE *cadastropaciente;
-        cadastropaciente = fopen("dados/cadastro paciente.txt", "r");
+        cadastropaciente = fopen("dados/pacientes.txt", "r");
         if (cadastropaciente == NULL) {
             printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
             FILE *arquivo;
@@ -61,6 +75,18 @@ void setup() {
         }
         fclose(cadastropaciente);
 
+
+        // Verificar se o arquivo de feedback existe
+        FILE *feedback;
+        feedback = fopen("dados/feedbacks.txt", "r");
+        if (feedback == NULL) {
+            printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
+            FILE *arquivo;
+            arquivo = fopen("dados/feedback.txt", "w+");
+            fclose(arquivo);
+            printf("ARQUIVO DE CADASTRO CRIADO COM SUCESSO !\n");
+        }
+        fclose(feedback);
 
 
         printf("ESTRUTURA CRIADA, EXECUTE O PROGRAMA NOVAMENTE \n\n");

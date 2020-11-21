@@ -6,9 +6,6 @@
 #include "screens.h"
 #include "setup.h"
 
-#include "source/usuarios.h"
-
-
 void main() {
     setup();
     system("cls");
@@ -17,7 +14,3 @@ void main() {
     
     return;
 }
-
-
-
-
