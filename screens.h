@@ -468,7 +468,7 @@ void showAddNewDoctor()
     
     printf("Informe a clinica de atendimento >: ");
     fflush(stdin);
-    scanf("%d", medico.clinica);
+    scanf("%d", &medico.clinica);
 
     if (gravarMedico(medico) != 0) {
         printf("\n\n MEDICO CADASTRADO COM SUCESSO !! \n \n");
@@ -485,46 +485,8 @@ void showAddNewDoctor()
 void showAddNewUser()
 {
     system("cls");
-
-
-
     drawHeader("CADASTRO DE FUNCIONARIO");
-    printf("Informe o nome do funcionario: ");
-    scanf("%s", nome);
-    strcat(line, nome);
-    strcat(line, "; ");
-    printf("Infome o CPF: ");
-    scanf("%s", CPF);
-    strcat(line, CPF);
-    strcat(line, "; ");
-    printf("Infome o telefone: ");
-    scanf("%s", telefone);
-    strcat(line, telefone);
-    strcat(line, "; ");
-    printf("Infome E-mail: ");
-    scanf("%s", email);
-    strcat(line, email);
-    strcat(line, "; ");
-    printf("Informe o Cargo: ");
-    scanf("%s", cargo);
-    strcat(line, cargo);
-    strcat(line, "; ");
-    printf("Informe o Codigo que sera cadastrado: ");
-    scanf("%s", codigo);
-    strcat(line, codigo);
-    strcat(line, "; \n");
-    FILE *fCadasfun = fopen("dados/cadastro.txt", "a+");
-
-    if (fCadasfun == NULL)
-    {
-        system("CLS");
-        printf("NÃO FOI POSSIVEL ABRIR O ARQUIVO DE USUÁRIOS.");
-        exit(1);
-    }
-
-    fputs(line, fCadasfun);
-    fclose(fCadasfun);
-
+    
     showHome();
 }
 

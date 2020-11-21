@@ -30,12 +30,12 @@ void setup() {
         // Validar se arquivos de medicos existe
         FILE *medicos;
         medicos = fopen("dados/medicos.txt", "r");
-        if (usuarios == NULL) {
-            printf("ARQUIVO DE USUARIOS SENDO CRIADO..... \n");
+        if (medicos == NULL) {
+            printf("ARQUIVO DE MEDICOS SENDO CRIADO..... \n");
             FILE *arquivo;
-            arquivo = fopen("dados/usuarios.txt", "w+");
+            arquivo = fopen("dados/medicos.txt", "w+");
             fclose(arquivo);
-            printf("ARQUIVO DE USUARIOS CRIADO COM SUCESSO !\n");
+            printf("ARQUIVO DE MEDICOS CRIADO COM SUCESSO !\n");
         }
         fclose(medicos);
 
@@ -67,11 +67,11 @@ void setup() {
         FILE *cadastropaciente;
         cadastropaciente = fopen("dados/pacientes.txt", "r");
         if (cadastropaciente == NULL) {
-            printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
+            printf("ARQUIVO DE PACIENTES SENDO CRIADO..... \n");
             FILE *arquivo;
-            arquivo = fopen("dados/cadastro paciente.txt", "w+");
+            arquivo = fopen("dados/pacientes.txt", "w+");
             fclose(arquivo);
-            printf("ARQUIVO DE CADASTRO CRIADO COM SUCESSO !\n");
+            printf("ARQUIVO DE PACIENTES CRIADO COM SUCESSO !\n");
         }
         fclose(cadastropaciente);
 
@@ -80,11 +80,11 @@ void setup() {
         FILE *feedback;
         feedback = fopen("dados/feedbacks.txt", "r");
         if (feedback == NULL) {
-            printf("ARQUIVO DE CADASTRO SENDO CRIADO..... \n");
+            printf("ARQUIVO DE FEEDBACK SENDO CRIADO..... \n");
             FILE *arquivo;
             arquivo = fopen("dados/feedback.txt", "w+");
             fclose(arquivo);
-            printf("ARQUIVO DE CADASTRO CRIADO COM SUCESSO !\n");
+            printf("ARQUIVO DE FEEDBACK CRIADO COM SUCESSO !\n");
         }
         fclose(feedback);
 

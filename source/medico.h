@@ -19,6 +19,7 @@ typedef struct medico Medico;
     Função que realiza o cadastro do médico dentro do arquivo médicos.txt
  */
 int gravarMedico(Medico medico){
+
     FILE *arquivo;
     arquivo = fopen("dados/medicos.txt", "a+");
 
@@ -28,10 +29,11 @@ int gravarMedico(Medico medico){
 
     }
 
-    fprintf(arquivo, "%d;%s;%s;%s;%d", medico.crm, medico.nome, medico.cpf, medico.email, medico.clinica);
+    fprintf(arquivo, "%d;%s;%s;%s;%d ", medico.crm, medico.nome, medico.cpf, medico.email, medico.clinica);
 
     fclose(arquivo);
 
+    return 1;
 }
 
 #endif
