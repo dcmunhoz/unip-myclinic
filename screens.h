@@ -197,6 +197,8 @@ void showHome()
     } while (opcao < 0 || opcao > 6);
 }
 
+/* ==== AGENDA ==== */
+
 void showNewSchedule()
 {
 
@@ -344,6 +346,8 @@ void showEditSchedule()
     showHome();
 }
 
+
+
 void showRegisters()
 {
     int opcao = 0;
@@ -362,15 +366,15 @@ void showRegisters()
 
         if (opcao == 1)
         {
-            showAddPatientRecord();
+            showPatientMenu();
         }
         else if (opcao == 2)
         {
-            showAddNewDoctor();
+            showDoctorMenu();
         }
         else if (opcao == 3)
         {
-            showAddNewUser();
+            showUserMenu();
         }
         else if (opcao == 0)
         {
@@ -380,7 +384,46 @@ void showRegisters()
     } while (opcao < 0);
 }
 
-void showAddPatientRecord()
+/* ==== PACIENTES ==== */
+
+void showPatientMenu(){
+    int opcao = 0;
+    drawHeader("MENU DE PACIENTES");
+
+    printf("O QUE DESEJA FAZER ? \n \n");
+    printf("1 - CADASTRAR PACIENTES \n");
+    printf("2 - LISTAR PACIENTES \n");
+    printf("3 - EDITAR PACIENTES \n");
+    printf("4 - EXCLUIR PACIENTES \n");
+    printf("0 - VOLTAR \n\n");
+
+    printf("ESCOLHA >: ");
+    scanf("%d", &opcao);
+
+    switch (opcao) {
+        case 1:
+            showAddPatient();
+        break;
+        case 2:
+            showListPatient();
+        break;
+        case 3:
+            showEditPatient();
+        break;
+        case 4:
+            showRemovePatient();
+        break;
+        case 0:
+            showHome();
+        break;
+        default:
+            showHome();
+        break;
+    }
+
+}
+
+void showAddPatient()
 {
     drawHeader("CADASTRO DE PACIENTE");
 
@@ -411,27 +454,122 @@ void showAddPatientRecord()
         system("pause");
     }
 
-    showHome();
+    showPatientMenu();
 }
 
-void showViewPacientData()
+void showListPatient()
 {
-    system("cls");
-
-    printf("2 - VISUALIZAR DADOS DO PACIENTE: \n");
-    //printf("infome o nome que deseja consultar: \n", nome);
-    //scanf("%s", &nome);
+    drawHeader("LISTAGEM PACIENTES");
+    listarPacientes();
+    system("pause");
+    showPatientMenu();
 }
 
-void showModifyPatientData()
+void showEditPatient()
 {
-    system("cls");
-    char nome[50];
-    int i = 0;
+    drawHeader("EDITAR PACIENTE");
+    listarPacientes();
 
-    printf("3 - MODIFICAR DADOS DO PACIENTE: \n");
-    printf("infome o nome: \n", nome);
-    scanf("%s", &nome[i]);
+    int pacienteEdicao = 0;
+
+    printf("Qual paciente deseja editar? (0 - VOLTAR) >:");
+    scanf("%d", &pacienteEdicao);
+
+    Paciente paciente;
+    paciente.id = pacienteEdicao;
+
+    printf("Informe o nome do paciente >: ");
+    fflush(stdin);
+    gets(paciente.nome);    
+
+    printf("Informe o CPF do paciente (SOMENTE NUMEROS) >: ");
+    fflush(stdin);
+    gets(paciente.cpf);
+
+    printf("Informe o e-mail do paciente >: ");
+    fflush(stdin);
+    gets(paciente.email);
+
+    printf("Informe o telefone do paciente (SOMENTE NUMEROS) >: ");
+    fflush(stdin);
+    gets(paciente.telefone);
+
+    if (editarPaciente(paciente) == 0) {
+        printf("\n \n HOUVE UM ERRO AO TENTAR EDITAR OS DADOS DO PACIENTE !!! \n\n");
+        exit(1);
+    } else { 
+        printf("DADOS DO PACIENTE FORAM SALVOS !! \n \n");
+        system("pause");
+    }
+
+    showPatientMenu();
+}
+
+void showRemovePatient(){
+    drawHeader("EXCLUSAO DE PACIENTE");
+    listarPacientes();
+
+    int pacienteExcluir;
+    printf("Qual ID do paciente a remover? (0 - VOLTAR) >: ");
+    scanf("%d", &pacienteExcluir);
+
+    if (pacienteExcluir != 0) {
+
+        if (excluirPaciente(pacienteExcluir) == 0) {
+            printf("ERRO AO EXCLUIR O PACIENTE");
+            exit(1);
+        } else {
+            printf("\n\nO PACIENTE FOI EXCLUIDO COM SUCESSO !! \n\n");
+            system("pause");
+        }
+
+    }
+
+    showPatientMenu();
+
+}
+
+/* ==== MEDICOS ==== */
+
+void showDoctorMenu() {
+
+    drawHeader("MENU DE MEDICOS");
+
+    int opcao = 0;
+
+    printf("O QUE DESEJA FAZER ?\n\n");
+    printf("1 - CADASTRAR MEDICO \n");
+    printf("2 - LISTAR MEDICO \n");
+    printf("3 - EDITAR MEDICO \n");
+    printf("4 - REMOVER MEDICO \n");
+    printf("0 - VOLTAR \n");
+    printf("ESCOLHA >: ");
+    scanf("%d", &opcao);
+
+
+    switch(opcao){
+        case 1:
+            showAddNewDoctor();
+        break;
+        case 2:
+            showListDoctor();
+        break;
+        case 3:
+            showEditDoctor();
+        break;
+        case 4:
+            showRemoveDoctor();
+        break;
+        case 0:
+            showHome();
+        break;
+        default:
+            showHome();
+        break;
+
+    }
+    
+
 }
 
 void showAddNewDoctor()
@@ -472,7 +610,123 @@ void showAddNewDoctor()
     }    
 
 
-    showHome();
+    showDoctorMenu();
+}
+
+void showListDoctor(){
+    drawHeader("LISTAGEM DE MEDICOS");
+    listarMedicos();
+    system("pause");
+    showDoctorMenu();
+
+}
+
+void showEditDoctor(){
+
+    drawHeader("EDITAR MEDICO");
+    listarMedicos();
+
+    int medicoEdicao = 0;
+
+    printf("\n QUAL CRM DO MEDICO VOCE DESEJA EDITAR? (0 - VOLTAR) >: ");
+    scanf("%d", &medicoEdicao);
+
+    if (medicoEdicao != 0) {
+
+        Medico medico;
+        medico.crm = medicoEdicao;
+        medico.clinica = 0;
+
+        printf("NOME DO MEDICO >: ");
+        fflush(stdin);
+        gets(medico.nome);
+
+        printf("CPF DO MEDICO >: ");
+        fflush(stdin);
+        gets(medico.cpf);
+
+        printf("E-MAIL DO MEDICO >: ");
+        fflush(stdin);
+        gets(medico.email);
+
+        printf("CLINICA ATENDIMENTO >: ");
+        scanf("%d", &medico.clinica);
+
+        if (editarMedico(medico) == 0) {
+            printf("\n\n ERRO AO EDITAR MEDICO \n\n");
+            exit(1);
+        } else {
+            printf("\n \n DADOS DO MEDICO ALTERADOS \n\n");
+            system("pause");
+        }
+    } 
+
+
+    showDoctorMenu();
+}
+
+void showRemoveDoctor(){
+    drawHeader("EDITAR MEDICO");
+    listarMedicos();
+
+    int medicoRemover = 0;
+
+    printf("\n QUAL CRM DO MEDICO VOCE DESEJA REMOVER? (0 - VOLTAR) >: ");
+    scanf("%d", &medicoRemover);
+
+    if (medicoRemover != 0) {
+
+        if (excluirMedico(medicoRemover) == 0) {
+            printf("\n\n ERRO AO REMOVER MEDICO \n\n");
+            exit(1);
+        } else {
+            printf("\n \n O MEDICO FOI REMOVIDO \n\n");
+            system("pause");
+        }
+    } 
+
+
+    showDoctorMenu();
+}
+
+/* ==== USUARIOS ==== */
+
+void showUserMenu(){
+    drawHeader("MENU DE USUARIOS");
+
+    int opcao = 0;
+
+    printf("O QUE DESEJA FAZER ?\n\n");
+    printf("1 - CADASTRAR USUARIO \n");
+    printf("2 - LISTAR USUARIO \n");
+    printf("3 - EDITAR USUARIO \n");
+    printf("4 - REMOVER USUARIO \n");
+    printf("0 - VOLTAR \n");
+    printf("ESCOLHA >: ");
+    scanf("%d", &opcao);
+
+
+    switch(opcao){
+        case 1:
+            showAddNewUser();
+        break;
+        case 2:
+            showListUsers();
+        break;
+        case 3:
+            
+        break;
+        case 4:
+            
+        break;
+        case 0:
+            
+        break;
+        default:
+            showHome();
+        break;
+
+    }
 }
 
 void showAddNewUser()
@@ -503,7 +757,14 @@ void showAddNewUser()
         system("pause");
     }
     
-    showHome();
+    showUserMenu();
+}
+
+void showListUsers(){
+
+    drawHeader("LISTAGEM USUARIOS");
+    listarUsuarios();
+
 }
 
 void showMedicalunit()

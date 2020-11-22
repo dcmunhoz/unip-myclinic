@@ -26,7 +26,7 @@ int gravarPaciente(Paciente paciente){
         return 0;
     }
 
-    fprintf(arquivo, "%d;%s;%s;%s;%s\n", ultimoId, paciente.nome, paciente.cpf, paciente.email, paciente.telefone);
+    fprintf(arquivo, "%d;%s;%s;%s;%s; \n", ultimoId, paciente.nome, paciente.cpf, paciente.email, paciente.telefone);
     fclose(arquivo);
 
 
@@ -49,15 +49,95 @@ int ultimoPaciente(){
         exit(1);
     }
 
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;]", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone) != EOF)
+    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;]; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone) != EOF)
     {
         ultimoId = paciente.id;
     }  
     
-
     ultimoId++;
     return ultimoId;
 
+}
+
+void listarPacientes(){
+
+    FILE *arquivo;
+    arquivo = fopen("dados/pacientes.txt", "r");
+
+    if (arquivo == NULL) {
+        printf("\n \nERRO AO LISTAR PACIENTES !!! \n \n");
+        exit(1);
+    }   
+
+    Paciente paciente;
+    paciente.id = 0;
+
+    printf(" ID |       NOME PACIENTE       | CPF PACIENTE |      E-MAIL PACIENTE      | TELEFONE PACIENTE \n");
+    printf("-----------------------------------------------------------------------------------------------\n");
+    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;]; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone) != EOF) {
+        printf("%3d | %25s | %12s | %25s | %11s \n", paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone);
+    }
+
+    fclose(arquivo);
+
+}
+
+int editarPaciente(Paciente pacienteEditado){
+    FILE *arquivoLeitura, *arquivoEdicao;
+    Paciente pacienteAtual;
+
+    arquivoLeitura = fopen("dados/pacientes.txt", "r");
+    arquivoEdicao  = fopen("dados/tmp/pacientes.txt", "w+");
+
+    if (arquivoLeitura == NULL || arquivoEdicao == NULL) {
+        return 0;
+    }
+
+    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;]; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone) != EOF) {
+
+        if (pacienteAtual.id == pacienteEditado.id) {
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteEditado.id, pacienteEditado.nome, pacienteEditado.cpf, pacienteEditado.email, pacienteEditado.telefone);
+        } else {
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone);
+        }
+
+    }
+
+    fclose(arquivoLeitura);
+    fclose(arquivoEdicao);
+
+    remove("dados/pacientes.txt");
+    rename("dados/tmp/pacientes.txt", "dados/pacientes.txt");
+
+    return 1;
+}
+
+int excluirPaciente(int pacienteExcluir){
+    FILE *arquivoLeitura, *arquivoEdicao;
+    Paciente pacienteAtual;
+
+    arquivoLeitura = fopen("dados/pacientes.txt", "r");
+    arquivoEdicao  = fopen("dados/tmp/pacientes.txt", "w+");
+
+    if (arquivoLeitura == NULL || arquivoEdicao == NULL) {
+        return 0;
+    }
+
+    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;]; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone) != EOF) {
+
+        if (pacienteAtual.id != pacienteExcluir) {
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone);
+        }
+
+    }
+
+    fclose(arquivoLeitura);
+    fclose(arquivoEdicao);
+
+    remove("dados/pacientes.txt");
+    rename("dados/tmp/pacientes.txt", "dados/pacientes.txt");
+
+    return 1;
 }
 
 
