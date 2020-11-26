@@ -10,6 +10,7 @@ struct paciente {
     char cpf[12];
     char telefone[12];
     char email[255];
+    int unidadeMedica;
 
 };
 
@@ -26,7 +27,7 @@ int gravarPaciente(Paciente paciente){
         return 0;
     }
 
-    fprintf(arquivo, "%d;%s;%s;%s;%s; \n", ultimoId, paciente.nome, paciente.cpf, paciente.email, paciente.telefone);
+    fprintf(arquivo, "%d;%s;%s;%s;%s;%d; \n", ultimoId, paciente.nome, paciente.cpf, paciente.email, paciente.telefone, paciente.unidadeMedica);
     fclose(arquivo);
 
 
@@ -49,7 +50,7 @@ int ultimoPaciente(){
         exit(1);
     }
 
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;]; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone) != EOF)
+    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%d; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone, &paciente.unidadeMedica) != EOF)
     {
         ultimoId = paciente.id;
     }  
@@ -72,10 +73,10 @@ void listarPacientes(){
     Paciente paciente;
     paciente.id = 0;
 
-    printf(" ID |       NOME PACIENTE       | CPF PACIENTE |      E-MAIL PACIENTE      | TELEFONE PACIENTE \n");
+    printf(" ID |       NOME PACIENTE       | CPF PACIENTE |      E-MAIL PACIENTE      | TELEFONE PACIENTE  |      UNIDADE \n");
     printf("-----------------------------------------------------------------------------------------------\n");
-    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;]; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone) != EOF) {
-        printf("%3d | %25s | %12s | %25s | %11s \n", paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone);
+    while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%d; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone, &paciente.unidadeMedica) != EOF) {
+        printf("%3d | %25s | %12s | %25s | %11s | %13d \n", paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone, paciente.unidadeMedica);
     }
 
     fclose(arquivo);
@@ -93,12 +94,12 @@ int editarPaciente(Paciente pacienteEditado){
         return 0;
     }
 
-    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;]; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone) != EOF) {
+    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;];%d; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone, &pacienteAtual.unidadeMedica) != EOF) {
 
         if (pacienteAtual.id == pacienteEditado.id) {
-            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteEditado.id, pacienteEditado.nome, pacienteEditado.cpf, pacienteEditado.email, pacienteEditado.telefone);
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s;%d; \n", pacienteEditado.id, pacienteEditado.nome, pacienteEditado.cpf, pacienteEditado.email, pacienteEditado.telefone, pacienteEditado.unidadeMedica);
         } else {
-            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone);
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s;%d; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone, pacienteAtual.unidadeMedica);
         }
 
     }
@@ -123,10 +124,10 @@ int excluirPaciente(int pacienteExcluir){
         return 0;
     }
 
-    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;]; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone) != EOF) {
+    while (fscanf(arquivoLeitura, "%d;%[^;];%[^;];%[^;];%[^;];%d; ", &pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone, &pacienteAtual.unidadeMedica) != EOF) {
 
         if (pacienteAtual.id != pacienteExcluir) {
-            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone);
+            fprintf(arquivoEdicao, "%d;%s;%s;%s;%s;%d; \n", pacienteAtual.id, pacienteAtual.nome, pacienteAtual.cpf, pacienteAtual.email, pacienteAtual.telefone, pacienteAtual.unidadeMedica);
         }
 
     }

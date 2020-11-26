@@ -3,9 +3,13 @@
 #include <string.h> //Biblioteca para usar a funçao strcmp
 #include <windows.h>
 #include <conio.h>
-#include "screens.h"
-#include "setup.h"
 
+#include "source/screens.h"
+#include "source/setup.h"
+
+/*
+    Função de execução principal do programa.
+*/
 void main() {
     setup();
     system("cls");

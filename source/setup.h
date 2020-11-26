@@ -89,7 +89,7 @@ void setup() {
         fclose(feedback);
 
 
-        printf("ESTRUTURA CRIADA, EXECUTE O PROGRAMA NOVAMENTE \n\n");
+        printf("\n\n** ESTRUTURA CRIADA, EXECUTE O PROGRAMA NOVAMENTE **\n\n");
         system("pause");
         exit(0);
     }

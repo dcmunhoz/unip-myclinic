@@ -55,6 +55,7 @@ int ultimaAgenda(){
     agenda.id = 0;
     agenda.unidadeMedica = 0;
     agenda.valorConsulta = 0.0;
+    float valorConsulta = agenda.valorConsulta;
 
 
     while (!feof(arquivo))
@@ -80,6 +81,8 @@ void listarAgenda(){
     agenda.id = 0;
     agenda.unidadeMedica = 0;
     agenda.valorConsulta = 0.0;
+    char dataAtendimento[12];
+
 
     if (arquivo == NULL) {
         system("cls");
@@ -87,12 +90,21 @@ void listarAgenda(){
         exit(1);
     }
 
+    printf("DIGITE A DATA QUE DESEJA VISUALIZAR:");
+    scanf("%s", dataAtendimento);
+    drawHeader("LISTA DE AGENDAMENTOS");
     printf(" ID |       NOME PACIENTE       |       NOME MEDICO         |     DATA     |    HORA    |    Valor    |    UNIDADE  \n");
     printf("------------------------------------------------------------------------------------\n");
     while (fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%f;%d; ", &agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, &agenda.valorConsulta, &agenda.unidadeMedica) != EOF ) {
         
-        printf("%3d | %25s | %25s | %12s | %10s | %11.2f | %12d \n", agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, agenda.valorConsulta, agenda.unidadeMedica);
+        if(strcmp(dataAtendimento, agenda.dataAtendimento)==0){
+
+            printf("%3d | %25s | %25s | %12s | %10s | %11.2f | %12d \n", agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, agenda.valorConsulta, agenda.unidadeMedica);
+        
+        }
     }
+
+
 
     fclose(arquivo);
 

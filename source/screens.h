@@ -11,10 +11,11 @@
 #include <windows.h>
 #include <conio.h>
 
-#include "source/usuarios.h"
-#include "source/agenda.h"
-#include "source/medico.h"
-#include "source/paciente.h"
+#include "usuarios.h"
+#include "agenda.h"
+#include "medico.h"
+#include "paciente.h"
+
 
 int defaultUserClinic = 0;
 
@@ -34,12 +35,12 @@ void showPrincipal()
 
     if (menuChoise == 1)
     {
-        //showLogin();
-        showHome();
+        showLogin();
+        
     }
     else if (menuChoise == 0)
     {
-        leave();
+        exit(1);
     }
 }
 
@@ -86,6 +87,7 @@ void showLogin()
     /* Exibe a senha como asteristico */
     int i = 0;
     int passwordLenght = 0;
+
     while ((c = getch()) != 13) // 13 = ENTER na tabela ASCII
     {
         Beep(1500, 50);
@@ -126,7 +128,7 @@ void showLogin()
 
     while (!feof(fUsers))
     {
-        fscanf(fUsers, "%d %s %s %d", &userId, validUsername, validPassword, userClinic);
+        fscanf(fUsers, "%d %s %s %d", &userId, validUsername, validPassword, &userClinic);
         if (strcmp(username, validUsername) == 0 && strcmp(password, validPassword) == 0)
         {
             userValidated = 1;
@@ -184,6 +186,7 @@ void showHome()
         }
         else if (opcao == 5)
         {
+            showMedicalunit();
         }
         else if (opcao == 6)
         {
@@ -224,7 +227,7 @@ void showNewSchedule()
 
     printf("Informe o horario da consulta:");
     fflush(stdin);
-    gets(agenda.horaAtendimento);
+   gets(agenda.horaAtendimento);
 
     printf("Infome a Clinica:");
     fflush(stdin);
@@ -355,7 +358,7 @@ void showRegisters()
     do
     {
         system("cls");
-        drawHeader("MANU DE CADASTROS");
+        drawHeader("MENU DE CADASTROS");
 
         printf("1 - CADASTRO DE PACIENTE\n");
         printf("2 - CADASTRO DE MEDICOS\n");
@@ -446,6 +449,10 @@ void showAddPatient()
     fflush(stdin);
     gets(paciente.telefone);
 
+    printf("Informe a unidade Medica >: ");
+    fflush(stdin);
+    scanf("%d", &paciente.unidadeMedica);
+
     if (gravarPaciente(paciente) == 0) {
         printf("\n\n HOUVE UM ERRO AO TENTAR GRAVAR OS DADOS DO PACIENTE !!! \n\n");
         exit(1);
@@ -493,6 +500,12 @@ void showEditPatient()
     printf("Informe o telefone do paciente (SOMENTE NUMEROS) >: ");
     fflush(stdin);
     gets(paciente.telefone);
+
+    printf("Informe a unidade Medica >: ");
+    fflush(stdin);
+    scanf("%d", &paciente.unidadeMedica);
+
+
 
     if (editarPaciente(paciente) == 0) {
         printf("\n \n HOUVE UM ERRO AO TENTAR EDITAR OS DADOS DO PACIENTE !!! \n\n");
@@ -763,39 +776,209 @@ void showAddNewUser()
 void showListUsers(){
 
     drawHeader("LISTAGEM USUARIOS");
-    listarUsuarios();
+    //listarUsuarios();
 
 }
 
 void showMedicalunit()
 {
-    FILE *agendas;
-    agendas = fopen("dados/agendas.txt", "r");
-    float valorConsulta;
+    drawHeader("MENU DE RELATORIO");
+    int opcao = 0;
 
-    system("cls");
-    printf("5 - RELATORIOS: \n");
 
-    while (fscanf(agendas, "%f", &valorConsulta) != EOF)
-    {
-        printf("%f", valorConsulta);
+    printf("1 - VALOR DE FATURAMENTO DIARIO \n");
+    printf("2 - VALOR DE FATURAMENTO MENSAL \n");
+    printf("3 - VALOR DE FATURAMENTO TOTAL \n");
+    printf("4 - PACIENTES POR UNIDADE \n");
+    printf("5 - UNIDADE DA CLINICA QUE MAIS ATENDE \n");
+    printf("0 - VOLTAR \n");
+    printf("ESCOLHA >: ");
+    scanf("%d", &opcao);
+
+
+    switch(opcao){
+        case 1:
+            valordeFaturamentoD();
+        break;
+        case 2:
+            valordeFaturamentoM();
+        break;
+        case 3:
+            valordeFaturamentoT();
+        break;
+        case 4:
+            pacienteporUnidade();
+        break;
+        case 5:
+            unidademaiorAtendimento();
+        break;
+        default:
+            showHome();
+        break;
     }
     
+}
+
+void valordeFaturamentoD(){
+    
+    drawHeader("FATURAMENTO DO DIA");
+    FILE *arquivo;
+    arquivo = fopen("dados/agendas.txt", "rt");
+    Agenda agenda;
+    agenda.valorConsulta=0.0;
+    float valorConsulta = agenda.valorConsulta;
+    char dataAtendimento[12];
+
+    printf("DIGITE A DATA QUE DESEJA VISUALIZAR O FATURAMENTO:");
+    scanf("%s", dataAtendimento);
+    
+    
+    while (!feof(arquivo)){
+        fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%f;%d; ", &agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, &agenda.valorConsulta, &agenda.unidadeMedica);
+        if(strcmp(dataAtendimento, agenda.dataAtendimento)==0){
+            valorConsulta += agenda.valorConsulta;
+
+        }
+        
+        
+    }
+
+    fclose(arquivo);
+    printf("O VALOR DO FATURAMENTO DO DIA %s FOI DE R$: %.2f\n", dataAtendimento,valorConsulta);
+
+    system("pause");
+    showHome();
+    
+}
+
+void valordeFaturamentoM(){
+
+    drawHeader("FATURAMENTO MENSAL");
+    FILE *arquivo;
+    arquivo = fopen("dados/agendas.txt", "rt");
+    Agenda agenda;
+    char dataAtendimento[12];
+    char mesBusca[12];
+    int quantidadeAtendimentos = 0;
+    agenda.valorConsulta=0.0;
+    float valorConsulta = agenda.valorConsulta;
+
+    printf("MES E ANO QUE DESEJA FERIFICAR O FATURAMENTO:");
+    scanf("%s", dataAtendimento);
+    
+    while (!feof(arquivo)){
+        fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%f;%d; ", &agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, &agenda.valorConsulta, &agenda.unidadeMedica);
+        for(int i = 0, j = 0; i<12; i++){
+            if (i >= 3){
+                mesBusca[j] = agenda.dataAtendimento[i];
+                j++;
+            }
+
+        }   
+        if (strcmp(mesBusca, dataAtendimento) == 0){
+            quantidadeAtendimentos++;
+            valorConsulta += agenda.valorConsulta;
+        }
+    
+        
+    }
+
+    printf("QUANTIDADE DE FATURAMENTO DO MES: %d \n", quantidadeAtendimentos);
+    printf("VALOR DE CONSULTAS DO MES: %.2f \n", valorConsulta);
+
+    system("pause");
+    showHome();
     
 
-    //if (agendas != 0)
-    //{
-    //    
-    //    
-    //    for (int i=5;i<=5;i++)
-    //    {
-    //        printf("5 - RELATORIOS: \n");
-    //        fseek(agendas, i, SEEK_SET); // vai pra coluna 'i' do arquivo
-    //        valorConsulta = fgetc(agendas); // pega o caractere
-    //        printf("%d %.2f", valorConsulta); // imprime na tela
-    //    }
-    //}
+
 }
+void valordeFaturamentoT(){
+
+    drawHeader("FATURAMENTO TOTAL");
+    FILE *arquivo;
+    arquivo = fopen("dados/agendas.txt", "rt");
+    Agenda agenda;
+    agenda.valorConsulta=0.0;
+    float valorConsulta = agenda.valorConsulta;
+    
+
+    
+    while (!feof(arquivo)){
+        fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%f;%d; ", &agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.dataAtendimento, &agenda.valorConsulta, &agenda.unidadeMedica);
+        valorConsulta += agenda.valorConsulta;
+    }
+
+    fclose(arquivo);
+    printf("O FATURAMENTO TOTAL FOI DE: %.2f\n", valorConsulta);
+
+    system("pause");
+    showHome();
+    
+
+}
+void pacienteporUnidade(){
+
+    drawHeader("UNIDADE COM MAIOR ATENDIMENTO");
+    FILE *arquivo;
+    arquivo = fopen("dados/pacientes.txt", "rt");
+    Paciente paciente;
+    int pacientePorUnidade[10] = {};
+    int unidadeComMaiorPaciente = 0;
+
+
+    
+    while (!feof(arquivo)){
+        fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%d; ", &paciente.id, paciente.nome, paciente.cpf, paciente.email, paciente.telefone, &paciente.unidadeMedica);
+        pacientePorUnidade[paciente.unidadeMedica]++;
+    }
+
+    fclose(arquivo);
+    for(int i=0; i<10; i++){
+        if(pacientePorUnidade[i]>0){
+            printf("A UNIDADE %d TEM %d PACIENTES\n", i, pacientePorUnidade[i]);
+        }
+      
+    }
+    
+
+    system("pause");
+    showHome();
+
+
+}
+void unidademaiorAtendimento(){
+
+    drawHeader("UNIDADE COM MAIOR ATENDIMENTO");
+    FILE *arquivo;
+    arquivo = fopen("dados/agendas.txt", "rt");
+    Agenda agenda;
+    int unidadeMedica[10] = {};
+    int unidadeMaiorAtendimento = 0;
+
+
+    
+    while (!feof(arquivo)){
+        fscanf(arquivo, "%d;%[^;];%[^;];%[^;];%[^;];%f;%d; ", &agenda.id, agenda.nomePaciente, agenda.nomeMedico, agenda.dataAtendimento, agenda.horaAtendimento, &agenda.valorConsulta, &agenda.unidadeMedica);
+        unidadeMedica[agenda.unidadeMedica]++;
+    }
+
+    fclose(arquivo);
+    for(int i=0; i<10; i++){
+        if(unidadeMedica[i] >= unidadeMaiorAtendimento){
+            unidadeMaiorAtendimento = i;
+
+        }
+    }
+    printf("A UNIDADE DE MAIOR ATENDIMENTO FOI A UNIDADE: %d\n", unidadeMaiorAtendimento);
+
+    system("pause");
+    showHome();
+
+
+}
+
+
+
 
 void showFeedback()
 {
@@ -806,7 +989,7 @@ void showFeedback()
 
     drawHeader("RECLAMACOES E ELOGIOS");
 
-    printf("Difgite sua sugestao: \n");
+    printf("Digite sua sugestao: \n");
     fflush(stdin);
     gets(sugestao);
     printf(" Deseja enviar seu feedback? 1 - sim \t 0 - nao ");
